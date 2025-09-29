@@ -1,197 +1,181 @@
-# Solana Token Presale Smart Contract
+# Solana Token Presale Platform
 
-A complete Solana token presale smart contract built with Anchor framework. This is a full-working project that provides a robust foundation for token presales on Solana blockchain.
+A comprehensive Solana-based token presale smart contract system built with the Anchor framework. This project provides a complete foundation for managing token presales on the Solana blockchain with advanced features and robust security.
 
-## Features
+## Core Features
 
-- **Multi-stage presale** with configurable pricing
-- **Dual payment support** - SOL and stable coins (USDC/USDT)
-- **Admin controls** for managing presale stages and settings
-- **User state tracking** for individual purchase history
-- **Pyth price feed integration** for real-time SOL/USD pricing
-- **Comprehensive testing suite**
-- **CLI tools** for easy deployment and management
-- **Enhanced security** with proper error handling and validation
-- **Robust stage management** with bounds checking and validation
+### Presale Management
+- Multi-stage presale system with 10 configurable stages
+- Flexible pricing strategies per stage
+- Automated stage progression based on token sales
+- Admin-controlled stage management
 
-## Recent Improvements
+### Payment Options
+- SOL payments with real-time price conversion
+- Stable coin support (USDC/USDT)
+- Pyth price feed integration for accurate SOL/USD pricing
+- Automatic token allocation calculations
 
-### Security Enhancements
-- **Removed unsafe `unwrap()` calls** that could cause panics
-- **Added proper error handling** for price feed operations
-- **Improved stage indexing logic** with bounds checking
-- **Enhanced validation** for stage transitions and configuration
+### Security & Administration
+- Comprehensive admin controls for presale management
+- User state tracking for purchase history
+- Secure token transfer mechanisms
+- Robust error handling and input validation
 
-### Code Quality Improvements
-- **Better error messages** for debugging and user experience
-- **Consistent stage management** across all purchase functions
-- **Added validation functions** for stage configuration
-- **Improved state management** with helper methods
+## Technical Stack
 
-### Error Handling
-- Added `StalePriceFeed` error for outdated price data
-- Added `PresaleAlreadyEnded` error for better state management
-- Improved validation in initialization and purchase functions
+- **Framework**: Anchor
+- **Blockchain**: Solana
+- **Language**: Rust
+- **Testing**: TypeScript with Anchor tests
+- **Price Feeds**: Pyth Network
 
-## Contact Information
+## Quick Start Guide
 
-- **Telegram**: [@topsecretagent_007](https://t.me/topsecretagent_007)
-- **GitHub**: [https://github.com/topsecretagent007/token-presale-smart-contract](https://github.com/topsecretagent007/token-presale-smart-contract)
-- **Test Project**: [https://wild-go-presale-pumpfun-frontend.vercel.app/](https://wild-go-presale-pumpfun-frontend.vercel.app/)
+### Prerequisites
 
-## Prerequisites
+Ensure you have the following installed:
+- Node.js and Yarn
+- Rust programming language
+- Solana CLI tools
+- Anchor framework
 
-### Install Dependencies
-
-- Install `node` and `yarn`
-- Install `rust`, `solana` and `anchor`
-
-    https://www.anchor-lang.com/docs/installation
-
-## How to Deploy
-
-### 1. Clone and Setup
+### Installation
 
 ```bash
-git clone https://github.com/topsecretagent007/token-presale-smart-contract
+git clone https://github.com/blixor7/Solana-Token-Presale-Platform.git
 cd token-presale-smart-contract
 yarn install
 ```
 
-### 2. Build the Program
+### Build and Deploy
 
-```bash
-anchor build
-```
+1. **Build the program**:
+   ```bash
+   anchor build
+   ```
 
-### 3. Get Program Address
+2. **Get program address**:
+   ```bash
+   solana-keygen pubkey ./target/deploy/presale-keypair.json
+   ```
 
-```bash
-solana-keygen pubkey ./target/deploy/presale-keypair.json
-```
+3. **Update program ID**:
+   - Replace the program ID in `programs/presale/src/lib.rs`
+   - Update `Anchor.toml` with your program address
 
-This will give you the program pubkey (e.g., `BE4G...5qhv`)
+4. **Deploy to network**:
+   ```bash
+   anchor deploy
+   ```
 
-### 4. Update Program Address
+## Configuration
 
-Update the program address in these files:
+### Network Setup
 
-**In `programs/presale/src/lib.rs`:**
-```rust
-declare_id!("YOUR_PROGRAM_ID_HERE");
-```
+Update `Anchor.toml` with your preferred network:
 
-**In `Anchor.toml`:**
-```toml
-[programs.localnet]
-presale = "YOUR_PROGRAM_ID_HERE"
-```
-
-### 5. Configure Provider Settings
-
-Update `Anchor.toml`:
 ```toml
 [provider]
-cluster = "localnet"  # or "devnet", "testnet", "mainnet-beta"
+cluster = "devnet"  # Options: localnet, devnet, testnet, mainnet-beta
 wallet = "./admin.json"
 ```
 
-### 6. Deploy
+### Presale Initialization
+
+Use the CLI tools to set up your presale:
 
 ```bash
-anchor build
-anchor deploy
+# Initialize project with token
+yarn script init -t <TOKEN_ADDRESS>
+
+# Set DAO wallet for funds
+yarn script set-vault -v <DAO_WALLET_ADDRESS>
+
+# Deposit tokens to presale
+yarn script deposit-token -t <TOKEN_ADDRESS> -a <DEPOSIT_AMOUNT>
+
+# Start presale
+yarn script start-presale -t <TOKEN_ADDRESS>
 ```
 
 ## Testing
 
-### Run Tests
+Run the comprehensive test suite:
 
 ```bash
 anchor test
 ```
 
-### Test on Devnet
+The test suite covers:
+- Contract initialization
+- User state management
+- Token purchase functionality
+- Stage management
+- Admin controls
+- Error conditions
 
-1. **Initialize project:**
-   ```bash
-   yarn script init -t <TOKEN_ADDRESS>
-   ```
+## Smart Contract Architecture
 
-2. **Set DAO wallet address:**
-   ```bash
-   yarn script set-vault -v <DAO_WALLET_ADDRESS>
-   ```
+### Key Components
 
-3. **Deposit tokens to the program:**
-   ```bash
-   yarn script deposit-token -t <TOKEN_ADDRESS> -a <DEPOSIT_AMOUNT>
-   ```
+- **Global State**: Manages presale configuration and admin settings
+- **User State**: Tracks individual purchase history and allocations
+- **Stage Management**: Handles multi-stage presale logic
+- **Price Integration**: Real-time price feeds for accurate conversions
 
-4. **Start presale:**
-   ```bash
-   yarn script start-presale -t <TOKEN_ADDRESS>
-   ```
+### Security Features
 
-5. **Set stage:**
-   ```bash
-   yarn script set-stage -s <STAGE_NUMBER>
-   ```
-
-## Smart Contract Features
-
-### Presale Stages
-- 10 configurable stages with different pricing
-- Automatic stage progression based on token sales
-- Admin-controlled stage management
-
-### Payment Methods
-- **SOL payments** with real-time price feeds
-- **USDC/USDT payments** for stable coin purchases
-- Automatic price conversion and token allocation
-
-### Admin Functions
-- Initialize global state
-- Set vault addresses
-- Start/pause presale
-- Manage presale stages
-- Transfer admin rights
-
-### User Functions
-- Initialize user state
-- Purchase tokens with SOL
-- Purchase tokens with stable coins
-- Track purchase history
-
-## Security Features
-
-- Admin-only functions with proper access control
-- Input validation and error handling
-- Pyth price feed integration for accurate pricing
-- Comprehensive state management
+- Admin-only function access control
+- Input validation and bounds checking
 - Secure token transfer mechanisms
+- Comprehensive error handling
+- Price feed staleness checks
 
-## Project Structure
+## Recent Improvements
 
+### Security Enhancements
+- Removed unsafe `unwrap()` calls
+- Added stale price feed detection
+- Improved stage validation logic
+- Enhanced error handling throughout
+
+### Code Quality
+- Better error messages for debugging
+- Consistent stage management
+- Improved validation functions
+- Robust state management helpers
+
+## CLI Commands Reference
+
+```bash
+# Initialize presale
+yarn script init -t <TOKEN_ADDRESS>
+
+# Set vault address
+yarn script set-vault -v <DAO_WALLET_ADDRESS>
+
+# Deposit tokens
+yarn script deposit-token -t <TOKEN_ADDRESS> -a <AMOUNT>
+
+# Start presale
+yarn script start-presale -t <TOKEN_ADDRESS>
+
+# Set stage
+yarn script set-stage -s <STAGE_NUMBER>
 ```
-├── programs/presale/src/
-│   ├── lib.rs              # Main program entry point
-│   ├── state.rs            # Account state definitions
-│   ├── error.rs            # Custom error types
-│   ├── constant.rs         # Program constants and stages
-│   ├── util.rs             # Utility functions
-│   └── instructions/       # Instruction implementations
-├── tests/                  # Test files
-├── cli/                    # Command line tools
-└── migrations/             # Deployment scripts
-```
+
+## Error Handling
+
+The contract includes comprehensive error handling for:
+- Invalid stage transitions
+- Stale price feeds
+- Insufficient funds
+- Presale state violations
+- Admin access control
 
 ## License
 
-This project is open source and available under the MIT License.
+This project is licensed under the MIT License.
 
-## Support
-
-For questions, custom requirements, or support:
-- **Telegram**: [@topsecretagent_007](https://t.me/topsecretagent_007)
-- **GitHub Issues**: [Create an issue](https://github.com/topsecretagent007/token-presale-smart-contract/issues)
+---
